@@ -61,7 +61,7 @@ def main():
     #     ]
     # ))
     
-     
+    st.write('Algumas linhas de informação não apresentam as coordenadas geográficas do acidente. Para todos estes casos foi considerado um ponto único')
 
 
 if __name__ == '__main__':
