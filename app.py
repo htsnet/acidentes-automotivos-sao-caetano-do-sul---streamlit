@@ -7,9 +7,12 @@ import matplotlib.pyplot as plt
 import altair as alt
 
 df = pd.read_csv('dfSCS.csv')
+# comandos executados na geração do arquivo, não é mais preciso aqui
 # trocando o nome do campo e ajustando o valor para tirar informação inexistente
-df['latitude'] = df['LAT_(GEO)'].apply(lambda x: float(x.replace(',', '.')) if x != 'NAO DISPONIVEL' else -23.62306)
-df['longitude'] = df['LONG_(GEO)'].apply(lambda x: float(x.replace(',', '.')) if x != 'NAO DISPONIVEL' else -46.55111)
+# df['latitude'] = df['LAT_(GEO)'].apply(lambda x: float(x.replace(',', '.')) if x != 'NAO DISPONIVEL' else -23.62306)
+# df['longitude'] = df['LONG_(GEO)'].apply(lambda x: float(x.replace(',', '.')) if x != 'NAO DISPONIVEL' else -46.55111)
+
+df['hora_cheia'] = df['Hora do Acidente'].apply(lambda x: x[0:2])
 
 
 
@@ -41,9 +44,12 @@ def main():
     if separa_por_ano:
         ano_selecionado = st.sidebar.slider('Selecione um ano', 2019, 2020, 2020)     # limite inferior, limite superior, valor default
         df_selected = df[df['Ano do Acidente'] == ano_selecionado]
-        st.sidebar.write('Ano com {} registros de acidentes'.format(df_selected.shape[0]))
+        st.write('Ano com {} registros de acidentes'.format(df_selected.shape[0]))
     else:
         df_selected = df
+        fig, ax = plt.subplots()
+        sns.countplot(x='Ano do Acidente', data=df_selected)
+        st.pyplot(fig)  
 
     st.subheader('Mapa dos acidentes veiculares')
     st.map(df_selected)
@@ -56,8 +62,28 @@ def main():
     # ))
 
     fig, ax = plt.subplots()
-    ax.hist(df_selected['Dia da Semana'], bins=13)
+    g = sns.countplot(x='Ano/Mês do Acidente', data=df_selected)
+    g.set_xticklabels(g.get_xticklabels(), rotation=90  )
+    g.set(ylabel='Qtde.')
     st.pyplot(fig)
+
+
+    fig, ax = plt.subplots()
+    g = sns.countplot(x='Dia da Semana', data=df_selected, order=df_selected['Dia da Semana'].unique())
+    g.set_xticklabels(g.get_xticklabels(), rotation=30)
+    g.set(ylabel='Qtde.')
+    st.pyplot(fig)
+
+    fig, ax = plt.subplots()
+    g = sns.countplot(x='hora_cheia', data=df_selected)
+    g.set(xlabel='Hora Cheia', ylabel='Qtde.')
+    st.pyplot(fig)
+    
+    
+
+    # fig, ax = plt.subplots()
+    # ax.hist(df_selected['Dia da Semana'], bins=13)
+    # st.pyplot(fig)
 
     # day_order = ["DOMINGO", "SEGUNDA", "TERÇA", "QUARTA", "QUINTA", "SEXTA", "SÁBADO"]
     # sns.countplot(x = "Dia da Semana", data = df_selected, order = day_order)
