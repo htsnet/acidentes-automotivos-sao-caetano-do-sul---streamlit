@@ -2,6 +2,9 @@
 import streamlit as st
 import pandas as pd
 import pydeck as pdk
+import seaborn as sns
+import matplotlib.pyplot as plt
+import altair as alt
 
 df = pd.read_csv('dfSCS.csv')
 # trocando o nome do campo e ajustando o valor para tirar informação inexistente
@@ -23,7 +26,7 @@ def main():
     st.markdown("""
     Usando as informações do site oficial do **Estado de São Paulo**, 
     este quadro apresenta um resumo dos acidentes automotivos registrados na
-    cidade de São Caetano do Sul. 
+    cidade de **São Caetano do Sul**. 
     Você pode escolher na lateral esquerda o ano desejado para visualização.
     """)
     # informação na side bar
@@ -33,11 +36,41 @@ def main():
         st.header('Dados de entrada')
         st.write(df)
 
-    ano_selecionado = st.sidebar.slider('Selecione um ano', 2019, 2020, 2020)     # limite inferior, limite superior, valor default
-    df_selected = df[df['Ano do Acidente'] == ano_selecionado]
+    separa_por_ano = st.sidebar.checkbox('Separar por ano')
+
+    if separa_por_ano:
+        ano_selecionado = st.sidebar.slider('Selecione um ano', 2019, 2020, 2020)     # limite inferior, limite superior, valor default
+        df_selected = df[df['Ano do Acidente'] == ano_selecionado]
+        st.sidebar.write('Ano com {} registros de acidentes'.format(df_selected.shape[0]))
+    else:
+        df_selected = df
 
     st.subheader('Mapa dos acidentes veiculares')
     st.map(df_selected)
+
+    st.write(' ')
+
+    # st.write(alt.Chart(df_selected).mark_bar().encode(
+    #     x=alt.X('Dia da Semana', sort=None),
+    #     y='Dia',
+    # ))
+
+    fig, ax = plt.subplots()
+    ax.hist(df_selected['Dia da Semana'], bins=13)
+    st.pyplot(fig)
+
+    # day_order = ["DOMINGO", "SEGUNDA", "TERÇA", "QUARTA", "QUINTA", "SEXTA", "SÁBADO"]
+    # sns.countplot(x = "Dia da Semana", data = df_selected, order = day_order)
+
+    #Bar Chart
+    # st.bar_chart(df_selected['Dia da Semana'])
+    
+
+    #histogram
+    
+    # df_selected['Dia da Semana'].hist()
+    # plt.show()
+    # st.pyplot()
 
     # st.pydeck_chart(pdk.Deck(
     #     initial_view_state=pdk.ViewState(
