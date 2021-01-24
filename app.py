@@ -22,8 +22,9 @@ def main():
     st.title('Acidentes automotivos em São Caetano do Sul')
     st.markdown("""
     Usando as informações do site oficial do **Estado de São Paulo**, 
-    este quadro apresenta detalhes dos acidentes registrados na
-    cidade de São Caetano do Sul
+    este quadro apresenta um resumo dos acidentes automotivos registrados na
+    cidade de São Caetano do Sul. 
+    Você pode escolher na lateral esquerda o ano desejado para visualização.
     """)
     # informação na side bar
     st.sidebar.info('Foram carregadas {} linhas'. format(df.shape[0]))
