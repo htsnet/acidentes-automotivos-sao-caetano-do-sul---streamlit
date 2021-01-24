@@ -11,8 +11,7 @@ df = pd.read_csv('dfSCS.csv')
 # trocando o nome do campo e ajustando o valor para tirar informação inexistente
 # df['latitude'] = df['LAT_(GEO)'].apply(lambda x: float(x.replace(',', '.')) if x != 'NAO DISPONIVEL' else -23.62306)
 # df['longitude'] = df['LONG_(GEO)'].apply(lambda x: float(x.replace(',', '.')) if x != 'NAO DISPONIVEL' else -46.55111)
-
-df['hora_cheia'] = df['Hora do Acidente'].apply(lambda x: x[0:2])
+# df['hora_cheia'] = df['Hora do Acidente'].apply(lambda x: x[0:2])
 
 
 
@@ -62,7 +61,7 @@ def main():
     # ))
 
     fig, ax = plt.subplots()
-    g = sns.countplot(x='Ano/Mês do Acidente', data=df_selected)
+    g = sns.countplot(x='ano_mes_acidente', data=df_selected)
     g.set_xticklabels(g.get_xticklabels(), rotation=90  )
     g.set(ylabel='Qtde.')
     st.pyplot(fig)
