@@ -3,5 +3,5 @@ pandas
 matplotlib
 sklearn
 seaborn
-streamlit==0.60.0
+streamlit==0.75.0
 altair
