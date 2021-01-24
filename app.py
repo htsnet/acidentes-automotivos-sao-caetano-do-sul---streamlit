@@ -21,18 +21,19 @@ PAGE_CONFIG = {
     'layout': 'centered'
 }
 #st.beta_set_page_config(**PAGE_CONFIG)
+st.set_page_config(page_title='Acidentes Automotivos em São Caetano do Sul', page_icon=':car', layout='centered', )
 
 def main():
   # definindo os parâmetros
     st.title('Acidentes automotivos em São Caetano do Sul')
     st.markdown("""
-    Usando as informações do site oficial do **Estado de São Paulo**, 
+    Usando as informações do site oficial do **Estado de São Paulo** (http://www.respeitoavida.sp.gov.br/relatorios/), 
     este quadro apresenta um resumo dos acidentes automotivos registrados na
     cidade de **São Caetano do Sul**. 
     Você pode escolher na lateral esquerda o ano desejado para visualização.
     """)
     # informação na side bar
-    st.sidebar.info('Foram carregadas {} linhas'. format(df.shape[0]))
+    st.sidebar.info('Foram localizados {} acidentes.'. format(df.shape[0]))
 
     if st.sidebar.checkbox('Ver dados de entrada'):
         st.header('Dados de entrada')
