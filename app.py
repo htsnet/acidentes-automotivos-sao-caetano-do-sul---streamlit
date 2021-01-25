@@ -6,12 +6,8 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import altair as alt
 
+# utitliza o arquivo csv já trabalhado no programa inicial: clean_csv.py
 df = pd.read_csv('dfSCS.csv')
-# comandos executados na geração do arquivo, não é mais preciso aqui
-# trocando o nome do campo e ajustando o valor para tirar informação inexistente
-# df['latitude'] = df['LAT_(GEO)'].apply(lambda x: float(x.replace(',', '.')) if x != 'NAO DISPONIVEL' else -23.62306)
-# df['longitude'] = df['LONG_(GEO)'].apply(lambda x: float(x.replace(',', '.')) if x != 'NAO DISPONIVEL' else -46.55111)
-# df['hora_cheia'] = df['Hora do Acidente'].apply(lambda x: x[0:2])
 
 st.set_page_config(page_title='Acidentes Automotivos em São Caetano do Sul', page_icon=':car', layout='centered', )
 
@@ -49,14 +45,14 @@ def main():
     st.write(' ')
 
     fig, ax = plt.subplots()
-    g = sns.countplot(x='ano_mes_acidente', data=df_selected)
-    g.set_xticklabels(g.get_xticklabels(), rotation=90  )
-    g.set(ylabel='Qtde.')
+    g = sns.countplot(x='ano_mes_acidente', data=df_selected, order=reversed(df_selected['ano_mes_acidente'].unique()))
+    g.set_xticklabels(g.get_xticklabels(), rotation=90 )
+    g.set(ylabel='Qtde.', xlabel='Ano/Mês do Acidente')
     st.pyplot(fig)
 
 
     fig, ax = plt.subplots()
-    g = sns.countplot(x='Dia da Semana', data=df_selected, order=df_selected['Dia da Semana'].unique())
+    g = sns.countplot(x='dia_da_semana', data=df_selected, order=df_selected['dia_da_semana'].value_counts().index)
     g.set_xticklabels(g.get_xticklabels(), rotation=30)
     g.set(ylabel='Qtde.')
     st.pyplot(fig)
@@ -65,28 +61,6 @@ def main():
     g = sns.countplot(x='hora_cheia', data=df_selected)
     g.set(xlabel='Hora Cheia', ylabel='Qtde.')
     st.pyplot(fig)
-    
-    # st.pydeck_chart(pdk.Deck(
-    #     initial_view_state=pdk.ViewState(
-    #         latitude=-23.62306,
-    #         longitude=-46.55111,
-    #         zoom=12,
-    #         radius=20,
-    #         pitch=40
-    #     ),
-    #     layers=[
-    #         pdk.Layer(
-    #             'HexagonLayer',
-    #             data=df_selected[['latitude', 'longitude']],
-    #             get_position='[longitude, latitude]',
-    #             elevation_state=10,
-    #             pickable=True,
-    #             extruded=True,
-    #             get_color='[200, 30, 0, 160]',
-
-    #         )
-    #     ]
-    # ))
     
     st.write('Algumas linhas de informação não apresentam as coordenadas geográficas do acidente. Para todos estes casos foi considerado um ponto único')
 
